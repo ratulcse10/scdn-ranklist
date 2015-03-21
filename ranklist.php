@@ -1,6 +1,6 @@
 <html lang="en">
   <head>
-    <title>SUST CSE Developer Network ::. SCDN</title>
+    <title>SCDN ::. Developer Ranklist</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <meta name="description" content="SUST CSE Developer Network,Dept of CSE,SUST" />
@@ -52,6 +52,19 @@
 .table th  {
    text-align: center;   
 }
+a {
+    color: inherit;
+}
+
+a:hover {
+    font-weight: bold;
+    color: white;
+}
+
+a.developerID:hover {
+    font-weight: bold;
+    color: black;
+}
 </style>
 
 
@@ -61,22 +74,23 @@
                         <div class="bs-component">
                             <div class="panel panel-success">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title" align="center">Developer Ranklist [Based on <b>Github Public Repo</b> Contribution]</h3>
+                                    <h2 class="panel-title" align="center" style="font-size:22px">Developer Ranklist</h2><h3 class="panel-title" align="center"> [Based on <b>Github Repo</b> Contribution using 
+                                    <a href="#rankingCriteria" data-toggle="modal">Ranking Criteria</a>]</h3>
                                 </div>
-                               	<table class="table table-hover">
+                                <table class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th>Rank</th>
                                         <th>Name</th>
-                                        <th>Reg</th>
-                                   
-                                        <th>Longest streak</th>
-                                        <th>Current streak</th>
+                                        <th>Batch</th>
+                                        <th>Current Streak</th>
+                                        <th>Longest Streak</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php
-								function getStatus($username){
+<?php
+ 
+ function getStatus($username){
 
 $url = "https://github.com/".$username;
 
@@ -117,27 +131,133 @@ foreach($table_rows as $row => $tr) {
 }
 return $data;
 }
-								
-								$users[0]="ratulcse10";
-								$users[1]="ratulcse27";
-								
-								for($i=0;$i<2;$i++){
-								$data = getStatus($users[$i]);
-								//print_r($data);
-								echo"
-								<tr class='active'>
-                                        <td>1</td>
-                                        <td>Md. Yousuf Ali</td>
-                                        <td>2010331020</td>
-                                        
-                                        <td>".$data[1][0]."</td>
-                                        <td>".$data[2][0]."</td>
+
+
+function getName($username){
+
+$url = "https://github.com/".$username;
+
+$options = array(
+        CURLOPT_RETURNTRANSFER => true,     // return web page
+        CURLOPT_HEADER         => false,    // don't return headers
+        CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+        CURLOPT_ENCODING       => "",       // handle all encodings
+        CURLOPT_USERAGENT      => "spider", // who am i
+        CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+        CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+        CURLOPT_TIMEOUT        => 120,      // timeout on response
+        CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+        CURLOPT_SSL_VERIFYPEER => false     // Disabled SSL Cert checks
+    );
+
+$ch      = curl_init( $url );
+curl_setopt_array( $ch, $options );
+
+
+$page = curl_exec($ch);
+
+$dom = new DOMDocument();
+libxml_use_internal_errors(true);
+$dom->loadHTML($page);
+libxml_clear_errors();
+$xpath = new DOMXpath($dom);
+
+$data = array();
+// get all table rows and rows which are not headers
+$table_rows = $xpath->query('//span[@class="vcard-fullname"]');
+
+foreach($table_rows as $row => $tr) {
+    foreach($tr->childNodes as $td) {
+        $data[$row][] = preg_replace('~[\r\n]+~', '', trim($td->nodeValue));
+    }
+    $data[$row] = array_values(array_filter($data[$row]));
+}
+return $data;
+}
+
+$allDataSet;
+                                
+$users[0]="ratulcse10";$batch[0]=2010;
+$users[1]="ratulcse27";$batch[1]=2010;
+$users[2]="Nishikanto";$batch[2]=2012;
+$users[3]="anindya-dhruba";$batch[3]=2010;
+$users[4]="fahadsust";$batch[4]=2010;
+
+
+
+
+                                
+$Latest=0;
+$Longest=0;                               
+for($i=0;$i<sizeof($users);$i++){
+$data = getStatus($users[$i]);
+$data_name = getName($users[$i]);
+
+if($data[2][0]>0)
+{
+$allDataSetLatest[$Latest]["longest"]=$data[1][0];
+$allDataSetLatest[$Latest]["latest"]=$data[2][0];
+$allDataSetLatest[$Latest]["name"]=$data_name[0][0];
+$allDataSetLatest[$Latest]["username"]=$users[$i];
+$allDataSetLatest[$Latest]["batch"]=$batch[$i];
+$Latest++;
+}
+else
+{
+$allDataSetLongest[$Longest]["longest"]=$data[1][0];
+$allDataSetLongest[$Longest]["latest"]=$data[2][0];
+$allDataSetLongest[$Longest]["name"]=$data_name[0][0];
+$allDataSetLongest[$Longest]["username"]=$users[$i];
+$allDataSetLongest[$Longest]["batch"]=$batch[$i];
+$Longest++;
+}
+
+}
+
+usort($allDataSetLatest, function($a, $b) {
+    if($a['latest']==$b['latest']) return 0;
+    return $a['latest'] < $b['latest']?1:-1;
+});
+
+usort($allDataSetLongest, function($a, $b) {
+    if($a['longest']==$b['longest']) return 0;
+    return $a['longest'] < $b['longest']?1:-1;
+});
+                                
+?>
+
+                                <?php
+
+                                $real_rank=0;
+
+                                for($rank=0;$rank<$Latest;$rank++)
+                                {
+                                $real_rank=$real_rank+1;
+                                echo"
+                                <tr class='active'>
+                                        <td>".$real_rank."</td>
+                                        <td><a class='developerID' href='https://github.com/".$allDataSetLatest[$rank]["username"]."' target=_blank>".$allDataSetLatest[$rank]["name"]."</a></td>
+                                        <td>".$allDataSetLatest[$rank]["batch"]."</td>
+                                        <td>".$allDataSetLatest[$rank]["latest"]."</td>
+                                        <td>".$allDataSetLatest[$rank]["longest"]."</td>    
                                     </tr>";
-								
-								}
-								
-								
-								?>
+                                } 
+
+                                for($rank_post=0;$rank_post<$Longest;$rank_post++)
+                                {
+                                $real_rank=$real_rank+1;
+                                
+                                echo"
+                                <tr class='active'>
+                                        <td>".$real_rank."</td>
+                                        <td><a class='developerID' href='https://github.com/".$allDataSetLongest[$rank_post]["username"]."' target=_blank>".$allDataSetLongest[$rank_post]["name"]."</a></td>
+                                        <td>".$allDataSetLongest[$rank_post]["batch"]."</td>
+                                        <td>".$allDataSetLongest[$rank_post]["latest"]."</td>
+                                        <td>".$allDataSetLongest[$rank_post]["longest"]."</td>    
+                                    </tr>";
+                                } 
+
+                                ?>
                                     
                                    
                                 </tbody>
@@ -151,6 +271,29 @@ return $data;
    
 
 
+
+<div class="modal fade" id="rankingCriteria" tabindex="-1" role="dialog" aria-labelledby="AboutLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Ranking Criteria</h4>
+      </div>
+      <div class="modal-body">
+        <ol>
+            <li>Ranklist is Based on Developers' <b>Github Public/Private(Own) Repo</b> Contribution</li>
+            <li>Any Contribution to <b>another Developers' Github Private Repo</b> will not be counted</li>
+            <li>Ranking is based on <b>Longest Current Streak</b></li>
+            <li>If there are more than one Developer having <b>Current Streak 0</b> , then Ranking is based on <b>Longest Streak</b></li>
+        </ol>
+
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
       
 
 
