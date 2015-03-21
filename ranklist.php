@@ -172,7 +172,25 @@ foreach($table_rows as $row => $tr) {
     }
     $data[$row] = array_values(array_filter($data[$row]));
 }
+
+
+if($data[0][0] == NULL){
+$data = array();
+// get all table rows and rows which are not headers
+$table_rows = $xpath->query('//span[@class="vcard-username"]');
+
+foreach($table_rows as $row => $tr) {
+    foreach($tr->childNodes as $td) {
+        $data[$row][] = preg_replace('~[\r\n]+~', '', trim($td->nodeValue));
+    }
+    $data[$row] = array_values(array_filter($data[$row]));
+}
 return $data;
+
+}
+else{
+return $data;
+}
 }
 
 $allDataSet;
@@ -182,6 +200,8 @@ $users[1]="ratulcse27";$batch[1]=2010;
 $users[2]="Nishikanto";$batch[2]=2012;
 $users[3]="anindya-dhruba";$batch[3]=2010;
 $users[4]="fahadsust";$batch[4]=2010;
+$users[5]="nurcse";$batch[5]=2011;
+
 
 
 
