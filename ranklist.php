@@ -1,3 +1,6 @@
+<?php
+ini_set('max_execution_time', 300);
+?>
 <html lang="en">
   <head>
     <title>SCDN ::. Developer Ranklist</title>
@@ -194,16 +197,48 @@ return $data;
 }
 
 $allDataSet;
-                                
+ 
+/*
 $users[0]="ratulcse10";$batch[0]=2010;
 $users[1]="ratulcse27";$batch[1]=2010;
 $users[2]="Nishikanto";$batch[2]=2012;
 $users[3]="anindya-dhruba";$batch[3]=2010;
 $users[4]="fahadsust";$batch[4]=2010;
 $users[5]="nurcse";$batch[5]=2011;
+$users[6]="prium";$batch[6]=2010;
+$users[7]="MahadiHasanNahid";$batch[7]=2010;
+$users[8]="masiur";$batch[8]=2012;
+$users[9]="nayeemjoy";$batch[9]=2011;
+$users[10]="BluePandora";$batch[10]=2011;
+*/
 
 
+$dev_2010 = array("ratulcse10","ratulcse27","anindya-dhruba","fahadsust","prium","MahadiHasanNahid");
+$dev_2011 = array("nurcse","nayeemjoy","coderbdsust","BluePandora");
+$dev_2012 = array("Nishikanto","masiur");
 
+
+$dev_count=0;
+//2010
+for($dev_2010_count=0;$dev_2010_count<sizeof($dev_2010);$dev_2010_count++){
+$users[$dev_count] = $dev_2010[$dev_2010_count];
+$batch[$dev_count] = 2010;
+$dev_count++;
+}
+
+//2011
+for($dev_2011_count=0;$dev_2011_count<sizeof($dev_2011);$dev_2011_count++){
+$users[$dev_count] = $dev_2011[$dev_2011_count];
+$batch[$dev_count] = 2011;
+$dev_count++;
+}
+
+//2012
+for($dev_2012_count=0;$dev_2012_count<sizeof($dev_2012);$dev_2012_count++){
+$users[$dev_count] = $dev_2012[$dev_2012_count];
+$batch[$dev_count] = 2012;
+$dev_count++;
+}
 
 
                                 
@@ -215,8 +250,10 @@ $data_name = getName($users[$i]);
 
 if($data[2][0]>0)
 {
+$allDataSetLatest[$Latest]["longest_rank"]=str_replace($reaplce = array(" days"," day"), "", $data[1][0]);
+$allDataSetLatest[$Latest]["latest_rank"]=str_replace($reaplce = array(" days"," day"), "", $data[2][0]);
 $allDataSetLatest[$Latest]["longest"]=$data[1][0];
-$allDataSetLatest[$Latest]["latest"]=$data[2][0];
+$allDataSetLatest[$Latest]["latest"]= $data[2][0];
 $allDataSetLatest[$Latest]["name"]=$data_name[0][0];
 $allDataSetLatest[$Latest]["username"]=$users[$i];
 $allDataSetLatest[$Latest]["batch"]=$batch[$i];
@@ -224,8 +261,10 @@ $Latest++;
 }
 else
 {
-$allDataSetLongest[$Longest]["longest"]=$data[1][0];
-$allDataSetLongest[$Longest]["latest"]=$data[2][0];
+$allDataSetLongest[$Longest]["longest_rank"]= str_replace($reaplce = array(" days"," day"), "", $data[1][0]);
+$allDataSetLongest[$Longest]["latest_rank"]=str_replace($reaplce = array(" days"," day"), "", $data[2][0]);
+$allDataSetLongest[$Longest]["longest"]= $data[1][0];
+$allDataSetLongest[$Longest]["latest"]= $data[2][0];
 $allDataSetLongest[$Longest]["name"]=$data_name[0][0];
 $allDataSetLongest[$Longest]["username"]=$users[$i];
 $allDataSetLongest[$Longest]["batch"]=$batch[$i];
@@ -235,16 +274,19 @@ $Longest++;
 }
 
 usort($allDataSetLatest, function($a, $b) {
-    if($a['latest']==$b['latest']) return 0;
-    return $a['latest'] < $b['latest']?1:-1;
+    if($a['latest_rank']==$b['latest_rank']) return 0;
+    return $a['latest_rank'] < $b['latest_rank']?1:-1;
 });
 
 usort($allDataSetLongest, function($a, $b) {
-    if($a['longest']==$b['longest']) return 0;
-    return $a['longest'] < $b['longest']?1:-1;
+    if($a['longest_rank']==$b['longest_rank']) return 0;
+    return $a['longest_rank'] < $b['longest_rank']?1:-1;
 });
+
                                 
 ?>
+
+
 
                                 <?php
 
