@@ -214,8 +214,8 @@ $users[10]="BluePandora";$batch[10]=2011;
 
 
 $dev_2010 = array("ratulcse10","ratulcse27","anindya-dhruba","fahadsust","prium","MahadiHasanNahid");
-$dev_2011 = array("nurcse","nayeemjoy","coderbdsust","BluePandora");
-$dev_2012 = array("Nishikanto","masiur");
+$dev_2011 = array("nurcse","nayeemjoy","coderbdsust","BluePandora","shafinmahmud");
+$dev_2012 = array("Nishikanto","masiur","nowshad","nebir");
 
 
 $dev_count=0;
