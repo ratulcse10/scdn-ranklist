@@ -9,7 +9,7 @@ ini_set('max_execution_time', 300);
     <meta name="description" content="SUST CSE Developer Network,Dept of CSE,SUST" />
         <meta name="author" content="Abu Shahriar Ratul" />
  
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link href="css/ripples.min.css" rel="stylesheet">
         <link href="css/material-wfont.min.css" rel="stylesheet">
         <link href="css/snackbar.min.css" rel="stylesheet">
@@ -78,7 +78,7 @@ a.developerID:hover {
                             <div class="panel panel-success">
                                 <div class="panel-heading">
                                     <h2 class="panel-title" align="center" style="font-size:22px">Developer Ranklist</h2><h3 class="panel-title" align="center"> [Based on <b>Github Repo</b> Contribution using 
-                                    <a href="#rankingCriteria" data-toggle="modal">Ranking Criteria</a>]</h3>
+                                    <a href="#rankingCriteria" data-toggle="modal">Ranking Criteria</a> & <a href="#colorCriteria" data-toggle="modal">Color Criteria</a>]</h3>
                                 </div>
                                 <table class="table table-hover">
                                 <thead>
@@ -283,6 +283,37 @@ usort($allDataSetLongest, function($a, $b) {
     return $a['longest_rank'] < $b['longest_rank']?1:-1;
 });
 
+
+
+//Color Decision
+function developerColor($longest_streak){
+if($longest_streak>=60){
+	return "red";
+}
+else if($longest_streak>=50 && $longest_streak<=59){
+	return "orange";
+}
+else if($longest_streak>=40 && $longest_streak<=49){
+	return "yellow";
+}
+else if($longest_streak>=30 && $longest_streak<=39){
+	return "green";
+}
+else if($longest_streak>=20 && $longest_streak<=29){
+	return "brown";
+}
+else if($longest_streak>=10 && $longest_streak<=19){
+	return "blue";
+}
+else if($longest_streak>=5 && $longest_streak<=9){
+	return "violet";
+}
+else{
+	return "black";
+}
+
+}
+
                                 
 ?>
 
@@ -295,10 +326,11 @@ usort($allDataSetLongest, function($a, $b) {
                                 for($rank=0;$rank<$Latest;$rank++)
                                 {
                                 $real_rank=$real_rank+1;
+								$color = developerColor($allDataSetLatest[$rank]["longest"]);
                                 echo"
-                                <tr class='active'>
+                                <tr style='color:$color'>
                                         <td>".$real_rank."</td>
-                                        <td><a class='developerID' href='https://github.com/".$allDataSetLatest[$rank]["username"]."' target=_blank>".$allDataSetLatest[$rank]["name"]."</a></td>
+                                        <td><a class='developerID' title='$color developer' href='https://github.com/".$allDataSetLatest[$rank]["username"]."' target=_blank>".$allDataSetLatest[$rank]["name"]."</a><span class='glyphicon glyphicon-flash' style='color:$color'></span></td>
                                         <td>".$allDataSetLatest[$rank]["batch"]."</td>
                                         <td>".$allDataSetLatest[$rank]["latest"]."</td>
                                         <td>".$allDataSetLatest[$rank]["longest"]."</td>    
@@ -309,10 +341,11 @@ usort($allDataSetLongest, function($a, $b) {
                                 {
                                 $real_rank=$real_rank+1;
                                 
+								$color = developerColor($allDataSetLongest[$rank_post]["longest"]);
                                 echo"
-                                <tr class='active'>
+                                <tr style='color:$color'>
                                         <td>".$real_rank."</td>
-                                        <td><a class='developerID' href='https://github.com/".$allDataSetLongest[$rank_post]["username"]."' target=_blank>".$allDataSetLongest[$rank_post]["name"]."</a></td>
+                                        <td><a class='developerID' title='$color developer' href='https://github.com/".$allDataSetLongest[$rank_post]["username"]."' target=_blank>".$allDataSetLongest[$rank_post]["name"]."</a><span class='glyphicon glyphicon-flash' style='color:$color'></span></td>
                                         <td>".$allDataSetLongest[$rank_post]["batch"]."</td>
                                         <td>".$allDataSetLongest[$rank_post]["latest"]."</td>
                                         <td>".$allDataSetLongest[$rank_post]["longest"]."</td>    
@@ -363,14 +396,18 @@ usort($allDataSetLongest, function($a, $b) {
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Color Criteria</h4>
+        <h4 class="modal-title" id="myModalLabel">Color Criteria [Based on Longest Streak]</h4>
       </div>
       <div class="modal-body">
         <ol>
-            <li>Ranklist is Based on Developers' <b>Github Public/Private(Own) Repo</b> Contribution</li>
-            <li>Any Contribution to <b>another Developers' Github Private Repo</b> will not be counted</li>
-            <li>Ranking is based on <b>Longest Current Streak</b></li>
-            <li>If there are more than one Developer having <b>Current Streak 0</b> , then Ranking is based on <b>Longest Streak</b></li>
+			<li><p style="color:red">Red Developer [<b>60 +</b>]</p></li>
+			<li><p style="color:orange">Orange Developer [<b>50-59</b>]</p></li>
+			<li><p style="color:yellow">Yellow Developer [<b>40-49</b>]</p></li>
+			<li><p style="color:green">Green Developer [<b>30-39</b>]</p></li>
+			<li><p style="color:brown">Brown Developer [<b>20-29</b>]</p></li>
+			<li><p style="color:blue">Blue Developer [<b>10-19</b>]</p></li>
+			<li><p style="color:violet">Violet Developer [<b>5-9</b>]</p></li>
+			<li><p style="color:black">Black Developer [<b>5-9</b>]</p></li>
         </ol>
 
     </div>
