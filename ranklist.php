@@ -356,6 +356,30 @@ usort($allDataSetLongest, function($a, $b) {
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="colorCriteria" tabindex="-1" role="dialog" aria-labelledby="AboutLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Color Criteria</h4>
+      </div>
+      <div class="modal-body">
+        <ol>
+            <li>Ranklist is Based on Developers' <b>Github Public/Private(Own) Repo</b> Contribution</li>
+            <li>Any Contribution to <b>another Developers' Github Private Repo</b> will not be counted</li>
+            <li>Ranking is based on <b>Longest Current Streak</b></li>
+            <li>If there are more than one Developer having <b>Current Streak 0</b> , then Ranking is based on <b>Longest Streak</b></li>
+        </ol>
+
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
       
 
 
