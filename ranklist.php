@@ -257,6 +257,7 @@ $allDataSetLatest[$Latest]["latest"]= $data[2][0];
 $allDataSetLatest[$Latest]["name"]=$data_name[0][0];
 $allDataSetLatest[$Latest]["username"]=$users[$i];
 $allDataSetLatest[$Latest]["batch"]=$batch[$i];
+$allDataSetLatest[$Latest]["combined_rank"]=$allDataSetLatest[$Latest]["latest_rank"].$allDataSetLatest[$Latest]["longest_rank"];
 $Latest++;
 }
 else
@@ -274,8 +275,8 @@ $Longest++;
 }
 
 usort($allDataSetLatest, function($a, $b) {
-    if($a['latest_rank']==$b['latest_rank']) return 0;
-    return $a['latest_rank'] < $b['latest_rank']?1:-1;
+    if($a['combined_rank']==$b['combined_rank']) return 0;
+    return $a['combined_rank'] < $b['combined_rank']?1:-1;
 });
 
 usort($allDataSetLongest, function($a, $b) {
@@ -380,7 +381,8 @@ else{
             <li>Any Contribution to <b>another Developers' Github Private Repo</b> will not be counted</li>
             <li>Ranking is based on <b>Longest Current Streak</b></li>
             <li>If there are more than one Developer having <b>Current Streak 0</b> , then Ranking is based on <b>Longest Streak</b></li>
-        </ol>
+            <li>If there are more than one Developer having <b>Same Current Streak </b> , then Ranking is based on <b>Longest Streak</b></li>  
+		</ol>
 
     </div>
       <div class="modal-footer">
