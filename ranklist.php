@@ -257,7 +257,7 @@ $allDataSetLatest[$Latest]["latest"]= $data[2][0];
 $allDataSetLatest[$Latest]["name"]=$data_name[0][0];
 $allDataSetLatest[$Latest]["username"]=$users[$i];
 $allDataSetLatest[$Latest]["batch"]=$batch[$i];
-$allDataSetLatest[$Latest]["combined_rank"]=$allDataSetLatest[$Latest]["latest_rank"].$allDataSetLatest[$Latest]["longest_rank"];
+$allDataSetLatest[$Latest]["combined_rank"]=$allDataSetLatest[$Latest]["latest_rank"]*100+$allDataSetLatest[$Latest]["longest_rank"];
 $Latest++;
 }
 else
