@@ -40,7 +40,8 @@ ini_set('max_execution_time', 300);
               <h1 style="font-size:40px"  id="navbar" align=center >SCDN</h1>
               
               <h4 align=center > <b>S</b>UST <b>C</b>SE <b>D</b>eveloper <b>N</b>etwork </h4>
-
+              <div align=center><code>Imagination means Nothing Without Doing</code></div>
+		<span id="motto"><a href="#">Under Development</a></span>
             </div>
 
           </div>
@@ -439,7 +440,7 @@ else{
     
 
     </div>
-
+ 
 </body>
  
 
