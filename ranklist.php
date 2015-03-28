@@ -40,8 +40,11 @@ ini_set('max_execution_time', 300);
               <h1 style="font-size:40px"  id="navbar" align=center >SCDN</h1>
               
               <h4 align=center > <b>S</b>UST <b>C</b>SE <b>D</b>eveloper <b>N</b>etwork </h4>
-              <div align=center><code>Imagination means Nothing Without Doing</code></div>
-		<span id="motto"><a href="#">Under Development</a></span>
+              <div class="well well-sm col-md-4 col-md-offset-4" align=center style="font-size:16px">
+		    Imagination means Nothing Without Doing
+		</div>
+              
+		
             </div>
 
           </div>
@@ -197,6 +200,48 @@ return $data;
 }
 }
 
+function getLatestUpdate(){
+
+$url = "https://github.com/ratulcse10/scdn-ranklist";
+
+$options = array(
+        CURLOPT_RETURNTRANSFER => true,     // return web page
+        CURLOPT_HEADER         => false,    // don't return headers
+        CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+        CURLOPT_ENCODING       => "",       // handle all encodings
+        CURLOPT_USERAGENT      => "spider", // who am i
+        CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+        CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+        CURLOPT_TIMEOUT        => 120,      // timeout on response
+        CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+        CURLOPT_SSL_VERIFYPEER => false     // Disabled SSL Cert checks
+    );
+
+$ch      = curl_init( $url );
+curl_setopt_array( $ch, $options );
+
+
+$page = curl_exec($ch);
+
+$dom = new DOMDocument();
+libxml_use_internal_errors(true);
+$dom->loadHTML($page);
+libxml_clear_errors();
+$xpath = new DOMXpath($dom);
+
+$data = array();
+// get all table rows and rows which are not headers
+$table_rows = $xpath->query('//span[@class="css-truncate css-truncate-target"]');
+
+foreach($table_rows as $row => $tr) {
+    foreach($tr->childNodes as $td) {
+        $data[$row][] = preg_replace('~[\r\n]+~', '', trim($td->nodeValue));
+    }
+    $data[$row] = array_values(array_filter($data[$row]));
+}
+return $data;
+}
+
 $allDataSet;
  
 /*
@@ -258,7 +303,7 @@ $allDataSetLatest[$Latest]["latest"]= $data[2][0];
 $allDataSetLatest[$Latest]["name"]=$data_name[0][0];
 $allDataSetLatest[$Latest]["username"]=$users[$i];
 $allDataSetLatest[$Latest]["batch"]=$batch[$i];
-$allDataSetLatest[$Latest]["combined_rank"]=$allDataSetLatest[$Latest]["latest_rank"]*100+$allDataSetLatest[$Latest]["longest_rank"];
+$allDataSetLatest[$Latest]["combined_rank"]=$allDataSetLatest[$Latest]["latest_rank"].$allDataSetLatest[$Latest]["longest_rank"];
 $Latest++;
 }
 else
@@ -380,10 +425,9 @@ else{
         <ol>
             <li>Ranklist is Based on Developers' <b>Github Public/Private(Own) Repo</b> Contribution</li>
             <li>Any Contribution to <b>another Developers' Github Private Repo</b> will not be counted</li>
-            <li>Ranking is based on <b>Longest Current Streak</b></li>
-            <li>If there are more than one Developer having <b>Current Streak 0</b> , then Ranking is based on <b>Longest Streak</b></li>
-            <li>If there are more than one Developer having <b>Same Current Streak </b> , then Ranking is based on <b>Longest Streak</b></li>  
-		</ol>
+            <li>Ranking is based on the Combination of <b>Current Streak & Longest Streak</b></li>
+            <li>Any Developer having <b>Current Streak 0</b> will get penalty , then Ranking is based only on <b>Longest Streak</b></li>
+          </ol>
 
     </div>
       <div class="modal-footer">
@@ -430,7 +474,7 @@ else{
       <footer>
         <div align="center">
        <div  >
-                        
+                <p>Latest Update: <?php $a=getLatestUpdate(); echo $a[1][0]; ?></p>       
                 <small class="copyright">SUST CSE Developer Network - SCDN (2014-<?php echo date('Y'); ?>)</br> Department of <b style="color:black">C</b>omputer <b style="color:black">S</b>cience and <b style="color:black">E</b>ngineering, <b style="color:black">S</b>hahjalal <b style="color:black">U</b>niversity of <b style="color:black">S</b>cience and <b style="color:black">T</b>echnology, Sylhet</small>
 
       </div>
@@ -440,7 +484,7 @@ else{
     
 
     </div>
- 
+    
 </body>
  
 
